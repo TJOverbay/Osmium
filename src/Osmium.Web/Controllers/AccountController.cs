@@ -15,13 +15,15 @@ namespace Osmium.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private SignInManager<ApplicationUser, string> _signInManager;
-        private ApplicationUserManager _userManager;
+        private readonly SignInManager<ApplicationUser, string> _signInManager;
+        private readonly ApplicationUserManager _userManager;
+        private readonly ApplicationRoleManager _roleManager;
 
-        public AccountController(ApplicationUserManager userManager, SignInManager<ApplicationUser, string> signInManager )
+        public AccountController(ApplicationUserManager userManager, SignInManager<ApplicationUser, string> signInManager, ApplicationRoleManager roleManager )
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
         public SignInManager<ApplicationUser, string> SignInManager
@@ -29,10 +31,6 @@ namespace Osmium.Web.Controllers
             get
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<SignInManager<ApplicationUser, string>>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
             }
         }
 
@@ -42,12 +40,15 @@ namespace Osmium.Web.Controllers
             {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
-            private set
-            {
-                _userManager = value;
-            }
         }
 
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            }
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -406,13 +407,16 @@ namespace Osmium.Web.Controllers
                 if (_userManager != null)
                 {
                     _userManager.Dispose();
-                    _userManager = null;
                 }
 
                 if (_signInManager != null)
                 {
                     _signInManager.Dispose();
-                    _signInManager = null;
+                }
+
+                if (_roleManager != null)
+                {
+                    _roleManager.Dispose();
                 }
             }
 

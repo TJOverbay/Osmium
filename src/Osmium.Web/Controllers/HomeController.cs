@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,9 +11,11 @@ namespace Osmium.Web.Controllers
     {
         public ActionResult Index()
         {
+            var userRoles = (ClaimsPrincipal)User;
             return View();
         }
 
+        [Authorize(Roles = "Site Administrator")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
