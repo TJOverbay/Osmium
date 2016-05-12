@@ -7,5 +7,14 @@
     "gulp-cssmin": "0.1.7",
     "gulp-uglify": "1.2.0",
     "rimraf": "2.2.8"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "wwwroot"
+    },
+    "configFile": "connfig.js",
+    "devDependencies": {
+      "typescript": "npm:typescript@^1.6.2"
+    }
   }
 }
